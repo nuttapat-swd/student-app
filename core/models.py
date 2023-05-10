@@ -1,9 +1,9 @@
 from django.db import models
+from django_softdelete.models import SoftDeleteModel
+# from softdelete.models import SoftDeletionModel
 
-# Create your models here.
 
-
-class BaseModel(models.Model):
+class BaseModel(SoftDeleteModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -26,7 +26,7 @@ class Student(BaseModel):
     first_name = models.CharField(max_length=255, null=False)
     last_name = models.CharField(max_length=255, null=False)
     address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,null=True)
-    student_id = models.CharField(max_length=13,unique=True,null=False)
+    student_id = models.CharField(max_length=13,null=False)
     description = models.TextField(blank=True)
     
     def __str__(self):
