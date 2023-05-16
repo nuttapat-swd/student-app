@@ -1,30 +1,42 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework import generics
 from rest_framework.decorators import action
 
 from core.models import Student, Address
-from studentdetail import serializers
+
+from studentdetail import serializers, filters, utils
+from rest_framework.pagination import LimitOffsetPagination
 
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 
+from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, TokenHasScope
 
 
-class StudentListView(APIView):
+class StudentListView(APIView, LimitOffsetPagination):
+    # permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
     serializer_class = serializers.StudentSerializer
     def get(self, request, format=None):
         params_payload = {}
-        if request.query_params :
-            for key in request.query_params.keys():
-                params_payload.update({'{}'.format(key):'{}'.format(request.query_params[key])})
-            students = Student.objects.filter(**params_payload)
-        else:
-            students = Student.objects.all()
+        # if request.query_params :
+        #     for key in request.query_params.keys():
+        #         params_payload.update({'{}'.format(key):'{}'.format(request.query_params[key])})
+        #     students = Student.objects.filter(**params_payload)
+        # else:
+        #     students = Student.objects.all()
+        students = Student.objects.all()
+        students = filters.StudentFilter(self.request.GET,queryset=students).qs
+
+        # results = self.paginate_queryset(students, request, view=self)
 
         serializer = serializers.StudentSerializer(students, many=True)
-        return Response(serializer.data)
+        # print(result, count, page)
+        students, count, page = utils.get_paginator(request, serializer.data)
+        return Response({"result": students, "count": count, "page": page}, status=status.HTTP_200_OK)
+        # return Response(serializer.data)
+        # return self.get_paginated_response(serializer.data)
             # raise Http404
     
     def post(self, request, format=None):

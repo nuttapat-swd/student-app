@@ -22,6 +22,7 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ('id', 'created_at', 'updated_at', 'first_name', 'last_name', 'student_id', 'description', 'address')
         read_only_fields = ['id','created_at', 'updated_at']
+        
     
     def _get_or_create_student(self, address, student):
         """Handle getting or creaing tags"""

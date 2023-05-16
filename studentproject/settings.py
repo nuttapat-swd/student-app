@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-j*wphin5y*jsq6aur(z*7ba$9du#p^51$*_w=yzn5txlwg&1_%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'core',
     'studentproject',
     'django_filters',
+    'oauth2_provider',
     ]
 
 MIDDLEWARE = [
@@ -134,6 +135,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
+
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    # ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #   'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3,
 }

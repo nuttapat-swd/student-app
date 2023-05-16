@@ -25,7 +25,7 @@ class Student(BaseModel):
     """Student object"""
     first_name = models.CharField(max_length=255, null=False)
     last_name = models.CharField(max_length=255, null=False)
-    address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,null=True)
+    address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,null=True,blank=True)
     student_id = models.CharField(max_length=13,null=False)
     description = models.TextField(blank=True)
     
