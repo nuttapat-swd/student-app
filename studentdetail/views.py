@@ -34,7 +34,6 @@ class StudentListView(APIView, LimitOffsetPagination):
         serializer = serializers.StudentSerializer(students, many=True)
         # print(result, count, page)
         students, count, page = utils.get_paginator(request, serializer.data)
-        print("test")
         return Response({"result": students, "count": count, "page": page}, status=status.HTTP_200_OK)
         # return Response(serializer.data)
         # return self.get_paginated_response(serializer.data)
