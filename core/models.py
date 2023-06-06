@@ -1,33 +1,39 @@
 from django.db import models
-from django_softdelete.models import SoftDeleteModel
+from safedelete.models import SafeDeleteModel, SOFT_DELETE
 # from softdelete.models import SoftDeletionModel
 
 
-class BaseModel(SoftDeleteModel):
+class BaseModel(SafeDeleteModel):
+    _safedelete_policy = SOFT_DELETE
+    original_objects = models.Manager()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
+
+    # deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         abstract = True
 
 class Address(BaseModel):
     """Address of student object"""
-    detail = models.TextField(null=False)
-    sub_district = models.CharField(max_length=255, null=False)
-    district = models.CharField(max_length=255, null=False)
-    city = models.CharField(max_length=255, null=False)
-    zip_code = models.CharField(max_length=5, null=False)
+    detail = models.TextField()
+    sub_district = models.CharField(max_length=255)
+    district = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    zip_code = models.CharField(max_length=255)
 
     def __str__(self):
         return self.detail + ", " + self.sub_district + ", " + self.district + ", " + self.city + ", " + self.zip_code
 
 class Student(BaseModel):
     """Student object"""
-    first_name = models.CharField(max_length=255, null=False)
-    last_name = models.CharField(max_length=255, null=False)
+    first_name = models.TextField()
+    last_name = models.TextField()
     address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,null=True,blank=True)
-    student_id = models.CharField(max_length=13,null=False)
-    description = models.TextField(blank=True)
+    student_id = models.TextField()
+    description = models.TextField()
     
     def __str__(self):
         return self.student_id + ": " + self.first_name + " " + self.last_name
+    

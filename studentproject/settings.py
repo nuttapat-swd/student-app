@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'studentproject',
     'django_filters',
     'oauth2_provider',
+    'djongo',
+    'schedule'
     ]
 
 MIDDLEWARE = [
@@ -82,6 +84,7 @@ WSGI_APPLICATION = 'studentproject.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default' : {},
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': env('DB_NAME'),
@@ -89,8 +92,19 @@ DATABASES = {
         'PASSWORD': env("DB_PASSWORD"),
         'HOST': env("DB_HOST"),
         'PORT': env("DB_PORT"),
-    }
+    },
+    'mongodb': {
+        'ENGINE' : 'djongo',
+        'NAME' : 'CM', #as named on server
+        'HOST': 'localhost',
+        'PORT': 27017,
+        'USER': 'root',  # Optional
+        'PASSWORD': 'password',
+        'AUTH_SOURCE': 'admin'
+   }
 }
+
+DATABASE_ROUTERS = ["routers.router.Router"]
 
 
 
